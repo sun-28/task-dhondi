@@ -8,6 +8,7 @@ const app = express();
 app.use(express.json())
 app.use(cors())
 app.use('/user',require('./routes/User'))
+app.use('/post',require('./routes/Post'))
 
 
 connection.connect((error) => {
