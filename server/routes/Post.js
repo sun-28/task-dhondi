@@ -8,7 +8,8 @@ const router = express.Router();
 
 router.get('/getAll', postController.getAllPosts);
 
-router.get('/:id', postController.getPostById);
+
+router.get('/getByid/:id', postController.getPostById);
 
 
 
@@ -22,5 +23,7 @@ router.post('/create', postController.createPost);
 router.put('/update/:id', postController.updatePost);
 
 router.delete('/del/:id', postController.deletePost);
+
+router.get('/getAllByUser', postController.getAllPostsByUserId);
 
 module.exports = router;

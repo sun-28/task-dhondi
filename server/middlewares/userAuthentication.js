@@ -1,26 +1,28 @@
 const jwt = require('jsonwebtoken');
 const connection = require('../db');
 const jwtSecret = process.env.JWT_SECRET;
-
-exports.userAuthentication = (req, res, next) => {
-    const token = req.headers.authorization.split(' ')[1];
+exports.userAuthentication = async (req, res, next) => {
+    const token = req.headers.authtoken;
     if (!token) {
         return res.status(401).json({ error: 'Missing token' });
     }
-
-    jwt.verify(token, jwtSecret, (err, decodedToken) => {
-        if (err) {
-            return res.status(401).json({ error: 'Invalid token' });
-        }
-
-        const userId = decodedToken.userId;
-        connection.query('SELECT * FROM users WHERE id = ?', userId, (error, results) => {
-            if (error || results.length === 0) {
-                return res.status(401).json({ error: 'User not found' });
-            }
-
-            req.user = results[0];
-            next();
+    try {
+        const dt = await jwt.verify(token, jwtSecret);
+        const results = await new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM users WHERE id = ?', dt.userId, (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(results);
+                }
+            });
         });
-    });
+        if (results.length === 0) {
+            return res.status(401).json({ error: 'User not found' });
+        }
+        req.userId = dt.userId;
+        next();
+    } catch (error) {
+        res.status(401).json({ error: "Invalid Token" });
+    }
 };
