@@ -7,11 +7,11 @@ const jwtSecret = process.env.JWT_SECRET;
 
 exports.registerUser = async (req, res) => {
     try {
-        const { name, username, password } = req.body;
+        const { name, username, password ,image} = req.body;
         console.log(password,typeof(password))
         const salt = bcrypt.genSaltSync(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        connection.query('INSERT INTO users (name, username, password) VALUES (?, ?, ?)', [name, username, hashedPassword], (error) => {
+        connection.query('INSERT INTO users (name, username, password,image) VALUES (?, ?, ?)', [name, username, hashedPassword,image], (error) => {
             if (error) {
                 res.status(500).json({ success: false, message: 'Error registering user' });
             } else {
@@ -49,12 +49,12 @@ exports.loginUser = async (req, res) => {
 
 exports.getUserProfile = (req, res) => {
     const userId = req.userId;
-    connection.query('SELECT id, name, username FROM users WHERE id = ?', userId, (error, results) => {
+    connection.query('SELECT id, name, username , image FROM users WHERE id = ?', userId, (error, results) => {
         if (error) {
             res.status(500).json({ success: false, error: 'Error retrieving user' });
         } else {
-            const {id,name,username} = results[0];
-            res.json({ success: true, user: {id,name,username} });
+            const {id,name,username,image} = results[0];
+            res.json({ success: true, user: {id,name,username,image} });
         }
     });
 };

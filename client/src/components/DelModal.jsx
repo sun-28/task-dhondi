@@ -31,7 +31,7 @@ const DelModal = ({id,nav}) =>  {
           <div
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
           >
-            <div className="relative my-6 w-1/5 bg-white p-4 rounded-xl">
+            <div className="relative my-6 w-1/5 min-w-[280px] bg-white p-4 rounded-xl">
                 <div className="flex flex-col justify-center items-center gap-2">
                     <h2 className="text-gray-700 font-medium">Sure you want to delete?</h2>
                     <p className="text-gray-500 text-sm mb-4 font-medium">Are you sure you want to delete this ?</p>

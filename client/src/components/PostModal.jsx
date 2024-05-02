@@ -27,7 +27,7 @@ const Modal = () => {
             {showModal ? (
                 <>
                     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none w-screen h-screen">
-                        <div className="relative my-6 w-2/5 bg-white p-4 rounded-xl">
+                        <div className="relative my-6 w-2/5 min-w-[300px] bg-white p-4 rounded-xl">
                             <div className="flex flex-col w-full h-full gap-4 ">
                                 <input className="bg-gray-200 p-2 rounded" placeholder='Write Title' type="text" name='title' value={postDetails.title} onChange={handleOnChange} />
                                 <div className="flex items-center flex-wrap">

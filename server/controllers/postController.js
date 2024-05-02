@@ -2,50 +2,81 @@ const connection = require('../db');
 
 
 
-exports.getAllPosts = (req, res) => {
-    connection.query('SELECT * FROM posts', (error, results) => {
-        if (error) {
-            return res.status(500).json({ success: false, message: 'Error retrieving posts' });
-        } else {
-            if(results.length !== 0) {
-                connection.query('SELECT name FROM users WHERE id = ?', results[0].user_id, (error, userResults) => {
-                    if (error) {
-                        return res.status(500).json({ success: false, message: 'Error retrieving user' });
+exports.getAllPosts = async (req, res) => {
+    try {
+        const posts = await new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM posts', async (error, results) => {
+                if (error) {
+                    reject({ success: false, message: 'Error retrieving posts' });
+                } else {
+                    if (results.length !== 0) {
+                        for (let i = 0; i < results.length; i++) {
+                            try {
+                                const userResults = await new Promise((resolve, reject) => {
+                                    connection.query('SELECT name,image FROM users WHERE id = ?', results[i].user_id, (error, userResults) => {
+                                        if (error) {
+                                            reject({ success: false, message: 'Error retrieving user' });
+                                        } else {
+                                            resolve(userResults);
+                                        }
+                                    });
+                                });
+                                results[i].name = userResults[0].name;
+                                results[i].image = userResults[0].image;
+                            } catch (error) {
+                                reject(error);
+                            }
+                        }
+                        resolve(results);
                     } else {
-                        results[0].name = userResults[0].name;
-                        console.log(1)
-                        return res.json({ success: true, data: results });
+                        resolve([]);
                     }
-                });
-            }
-            else
-            res.json({ success: true, data: [] });
-        }
-    });
+                }
+            });
+        });
+        res.json({ success: true, data: posts });
+    } catch (error) {
+        res.status(500).json(error);
+    }
 };
 
-
-exports.getAllPostsByUserId = (req, res) => {
+exports.getAllPostsByUserId = async (req, res) => {
     const userId = req.userId;
-    connection.query('SELECT * FROM posts WHERE user_id = ?', userId, (error, results) => {
-        if (error) {
-            res.status(500).json({ success: false, message: 'Error retrieving posts' });
-        } else {
-            if(results.length !== 0) {
-                connection.query('SELECT name FROM users WHERE id = ?', results[0].user_id, (error, userResults) => {
-                    if (error) {
-                        return res.status(500).json({ success: false, message: 'Error retrieving user' });
+    try {
+        const posts = await new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM posts WHERE user_id = ?', userId, async (error, results) => {
+                if (error) {
+                    reject({ success: false, message: 'Error retrieving posts' });
+                } else {
+                    if (results.length !== 0) {
+                        for (let i = 0; i < results.length; i++) {
+                            try {
+                                const userResults = await new Promise((resolve, reject) => {
+                                    connection.query('SELECT name,image FROM users WHERE id = ?', results[i].user_id, (error, userResults) => {
+                                        if (error) {
+                                            reject({ success: false, message: 'Error retrieving user' });
+                                        } else {
+                                            resolve(userResults);
+                                        }
+                                    });
+                                });
+                                results[i].name = userResults[0].name;
+                                results[i].image = userResults[0].image;
+                            } catch (error) {
+                                reject(error);
+                            }
+                        }
+                        resolve(results);
                     } else {
-                        results[0].name = userResults[0].name;
-                        return res.json({ success: true, data: results });
+                        resolve([]);
                     }
-                });
-            }
-            else{
-                return res.json({ success: true, data: [] });
-            }
-        }
-    });
+                }
+            });
+        });
+        res.json({ success: true, data: posts });
+    } catch (error) {
+        res.status(500).json(error);
+    }
 };
 
 
@@ -75,7 +106,6 @@ exports.createPost = (req, res) => {
     const parsedTags = JSON.stringify(tags);
     connection.query('INSERT INTO posts (title, content, tags, user_id) VALUES (?, ?, ?, ?)', [title, content, parsedTags, userId], (error, result) => {
         if (error) {
-            console.log(error)
             res.status(500).json({ success: false, message: 'Error creating post' });
         } else {
             res.status(201).json({ success: true, message: 'Post created successfully', postId: result.insertId });

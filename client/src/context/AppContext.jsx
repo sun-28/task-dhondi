@@ -12,7 +12,7 @@ const AppProvider = ({children}) => {
   const [showDel, setshowDel] = useState(false)
   const [yourPosts, setyourPosts] = useState([])
   const [allPosts, setallPosts] = useState([])
-  const [credentials, setcredentials] = useState()
+  const [credentials, setcredentials] = useState({username:'',password:'',name:''})
 
   const fetchUserDetails = async () => {
     const token = localStorage.getItem('auth-token')

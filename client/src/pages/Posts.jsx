@@ -37,8 +37,8 @@ const Posts = ({isYourPosts}) => {
             </button>
         </div>
         <div className='flex flex-col gap-4'>
-            {isYourPosts && yourPosts.map((post) => <VCard  isYourPosts={isYourPosts} key={post.id} {...post} />)}
-            {!isYourPosts && allPosts.map((post) => <VCard  isYourPosts={isYourPosts} key={post.id} {...post} />)}
+            {isYourPosts && yourPosts.map((post) =>{ return <VCard  isYourPosts={isYourPosts} key={post.id} {...post} />})}
+            {!isYourPosts && allPosts.map((post) =>{  return <VCard  isYourPosts={isYourPosts} key={post.id} {...post} />})}
         </div>
     </div>
         </>
