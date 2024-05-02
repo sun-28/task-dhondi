@@ -48,6 +48,13 @@ exports.loginUser = async (req, res) => {
 };
 
 exports.getUserProfile = (req, res) => {
-    const {id,name, username } = req.user;
-    res.json({ success: true, user: {id,name, username } });
+    const userId = req.userId;
+    connection.query('SELECT id, name, username FROM users WHERE id = ?', userId, (error, results) => {
+        if (error) {
+            res.status(500).json({ success: false, error: 'Error retrieving user' });
+        } else {
+            const {id,name,username} = results[0];
+            res.json({ success: true, user: {id,name,username} });
+        }
+    });
 };

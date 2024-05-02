@@ -10,6 +10,6 @@ router.post('/register', userController.registerUser);
 router.post('/login', userController.loginUser);
 
 // protected route ----
-router.get('/profile', userAuthentication, userController.getUserProfile);
+router.get('/details', userAuthentication, userController.getUserProfile);
 
 module.exports = router;

@@ -6,22 +6,21 @@ import { toast } from 'react-toastify';
 
 const Auth = () => {
     const navigate = useNavigate();
-    const { userDetails,setuserDetails,setisLogged} = useContext(AppContext);
+    const { credentials,setcredentials} = useContext(AppContext);
     useEffect(() => {
         if(localStorage.getItem('auth-token')){
-            setisLogged(true);
             navigate('/')
         }
     }, [])
     const [auth, setauth] = useState('login')
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setuserDetails((prev) => ({ ...prev, [name]: value }));
+        setcredentials((prev) => ({ ...prev, [name]: value }));
     };
     const handleSubmit = async (e) => {
         e.preventDefault()
         if(auth=='login'){
-            const {data} = await axios.post('http://localhost:5000/user/login',userDetails);
+            const {data} = await axios.post('http://localhost:5000/user/login',credentials);
             if(data.success){
             localStorage.setItem('auth-token', data.token)
             toast.success("Logged In Successfully!")
@@ -33,8 +32,8 @@ const Auth = () => {
             }
         }
         else{
-            console.log(userDetails)
-            const {data} = await axios.post('http://localhost:5000/user/register',userDetails);
+            console.log(credentials)
+            const {data} = await axios.post('http://localhost:5000/user/register',credentials);
             if(data.success){
                 setauth('login');
                 toast.success("Registered Successfully! Please Login to continue")
@@ -58,16 +57,16 @@ const Auth = () => {
                     {auth === 'login'?
                     <>
                     <p className="text-center text-3xl mb-4 text-green">Login</p>
-                    <input name='username' value={userDetails.username} onChange={handleChange} type='text' className="bg-slate-900 w-full rounded-lg border border-green px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800" placeholder="Username"/>
-                    <input name='password' value={userDetails.password} onChange={handleChange} type='password' className="bg-slate-900 w-full rounded-lg border border-green px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800" placeholder="Password"/>
+                    <input name='username' value={credentials.username} onChange={handleChange} type='text' className="bg-slate-900 w-full rounded-lg border border-green px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800" placeholder="Username"/>
+                    <input name='password' value={credentials.password} onChange={handleChange} type='password' className="bg-slate-900 w-full rounded-lg border border-green px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800" placeholder="Password"/>
                     <button onClick={handleSubmit} className="mt-4 inline-block cursor-pointer rounded-md bg-gray-700 px-4 py-3.5 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-700 focus-visible:ring-offset-2 active:scale-95">Login</button>
                     </>
                     :
                     <>
                     <p className="text-center text-3xl text-green mb-4">Sign Up</p>
-                    <input name='name' value={userDetails.name} onChange={handleChange} type='text' className="bg-slate-900 w-full rounded-lg border border-green px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800" placeholder="Name"/>
-                    <input name='username' value={userDetails.username} onChange={handleChange} type='text' className="bg-slate-900 w-full rounded-lg border border-green px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800" placeholder="Username"/>
-                    <input name='password' value={userDetails.password} onChange={handleChange} className="bg-slate-900 w-full rounded-lg border border-green px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800" placeholder="Password"/>
+                    <input name='name' value={credentials.name} onChange={handleChange} type='text' className="bg-slate-900 w-full rounded-lg border border-green px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800" placeholder="Name"/>
+                    <input name='username' value={credentials.username} onChange={handleChange} type='text' className="bg-slate-900 w-full rounded-lg border border-green px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800" placeholder="Username"/>
+                    <input name='password' value={credentials.password} onChange={handleChange} className="bg-slate-900 w-full rounded-lg border border-green px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800" placeholder="Password"/>
                     <button onClick={handleSubmit} className="mt-4 inline-block cursor-pointer rounded-md bg-gray-700 px-4 py-3.5 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-700 focus-visible:ring-offset-2 active:scale-95">Register</button>
                     </>
                     }

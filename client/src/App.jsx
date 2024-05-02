@@ -8,21 +8,22 @@ import Auth from './pages/Auth'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Post from './pages/Post'
+import Modal from './components/PostModal';
 
 function App() {
-  const {isLogged} = useContext(AppContext);
   return (
     <div className='mm bg-gray-100 flex'>
-      {localStorage.getItem('auth-token') && <SideBar/>}
       <Router>
+      {localStorage.getItem('auth-token') && <SideBar/>}
         <Routes>
           <Route path='/auth' element={<Auth/>}/>
           <Route path='/yourposts' element={<Posts isYourPosts={true}/>}/>
           <Route path='/' element={<Posts isYourPosts={false}/>}/>
           <Route path='/post/:id' element={<Post/>}/>
         </Routes>
-      </Router>
+      <Modal/>
       <ToastContainer/>
+      </Router>
     </div>
   )
 }

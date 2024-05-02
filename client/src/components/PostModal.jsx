@@ -1,10 +1,12 @@
-import axios from "axios";
-import React, { useState } from "react";
-import {toast} from "react-toastify";
-const Modal = ({ showModal, setShowModal, postDetails, setpostDetails }) => {
+import React, { useContext, useState } from "react"
+import { AppContext } from "../context/AppContext"
+const Modal = () => {
     
+    const {showModal, setShowModal, postDetails, setpostDetails,handlePublish} = useContext(AppContext); 
+
     const [showTagInput, setShowTagInput] = useState(false);
     const [newTag, setNewTag] = useState('');
+
 
     const handleOnChange = (e) => {
         setpostDetails({ ...postDetails, [e.target.name]: e.target.value });
@@ -18,36 +20,7 @@ const Modal = ({ showModal, setShowModal, postDetails, setpostDetails }) => {
         setShowTagInput(false);
     };
 
-    const handlePublish = async () => {
-        if(postDetails.update===true){
-            const {data} = await axios.put(`http://localhost:5000/post/update/${postDetails.id}`,postDetails,{
-                headers:{
-                    authToken:localStorage.getItem('auth-token')
-                }
-            });
-            if(data.success){
-                toast.success('Post Updated Successfully');
-                setpostDetails({ title: "", content: "", tags: [],update:false});
-            }
-            else{
-                toast.error('Error Updating Post');
-            }
-        }
-        else{
-            const {data} = await axios.post('http://localhost:5000/post/create',postDetails,{
-                headers:{
-                    authToken:localStorage.getItem('auth-token')
-                }
-            });
-            if(data.success){
-                toast.success('Post Created Successfully');
-                setpostDetails({ title: "", content: "", tags: []});
-            }
-            else{
-                toast.error('Error Creating Post');
-            }
-        }
-    };
+    
 
     return (
         <>
@@ -58,7 +31,7 @@ const Modal = ({ showModal, setShowModal, postDetails, setpostDetails }) => {
                             <div className="flex flex-col w-full h-full gap-4 ">
                                 <input className="bg-gray-200 p-2 rounded" placeholder='Write Title' type="text" name='title' value={postDetails.title} onChange={handleOnChange} />
                                 <div className="flex items-center flex-wrap">
-                                        {postDetails.tags.map((tag, idx) => (
+                                        {postDetails && postDetails.tags.map((tag, idx) => (
                                             <span key={idx} className="bg-purple-50 text-purple-600 font-normal rounded px-1 h-4 text-xs m-1">
                                                 {tag}
                                             </span>
@@ -83,12 +56,12 @@ const Modal = ({ showModal, setShowModal, postDetails, setpostDetails }) => {
                                 <textarea className='bg-gray-200 p-2 rounded resize-none' placeholder='Start Typing ....' name='content' value={postDetails.content} onChange={handleOnChange} cols="30" rows="15"></textarea>
                                 <div className="flex justify-end gap-2">
                                     <button onClick={() => { setpostDetails({ title: "", content: "", tags: [] }); setShowModal(false) }} className='bg-white text-black border border-black rounded w-28 h-8 flex justify-center items-center gap-2'>cancel</button>
-                                    <button onClick={() => { handlePublish(); setShowModal(false); }} className='bg-black text-white border-none rounded w-28 h-8 flex justify-center items-center gap-2'>Publish</button>
+                                    <button onClick={() => { handlePublish();}} className='bg-black text-white border-none rounded w-28 h-8 flex justify-center items-center gap-2'>Publish</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                    <div className="opacity-55 fixed inset-0 z-40 bg-black"></div>
                 </>
             ) : null}
         </>
