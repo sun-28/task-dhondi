@@ -26,6 +26,16 @@ const Auth = () => {
     };
     const [img,setImg] =useState('')
 
+    const handleRegister = async (url) => {
+        const {data} = await axios.post('http://localhost:5000/user/register',{...credentials,image:url});
+            if(data.success){
+                setauth('login');
+                toast.success("Registered Successfully! Please Login to continue")
+            }
+            else{
+                toast.error(data.message)
+            }
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -53,21 +63,13 @@ const Auth = () => {
                 const imgRef =  ref(imageDb,`files/${v4()}`)
                 uploadBytes(imgRef,img).then(value=>{
                     getDownloadURL(value.ref).then(url=>{
-                        setcredentials((prev) => ({ ...prev, image: url }));
+                        handleRegister(url);
                     })
                 })
              }
              else{
                 return toast.error('Please select an image')
              }
-            const {data} = await axios.post('http://localhost:5000/user/register',credentials);
-            if(data.success){
-                setauth('login');
-                toast.success("Registered Successfully! Please Login to continue")
-            }
-            else{
-                toast.error(data.message)
-            }
         }
     }
     return (

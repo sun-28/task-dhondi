@@ -1,7 +1,6 @@
 const connection = require('../db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { use } = require('../routes/User');
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -12,8 +11,6 @@ exports.registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
         connection.query('INSERT INTO users (name, username, password,image) VALUES (?, ?, ?,?)', [name, username, hashedPassword,image], (error) => {
             if (error) {
-                console.log(error)
-                //
                 res.json({ success: false, message: error.code === 'ER_DUP_ENTRY' ? 'Username already exists' : 'Error registering user'});
             } else {
                 res.json({ success: true, message: 'User registered successfully' });
