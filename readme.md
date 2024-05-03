@@ -1,3 +1,4 @@
+# Deploy link - [https://new-blog-production-1.onrender.com/]
 # Local Deploy Steps
 ## For server (PORT : 5000)
 ### 1) `cd server` 2) fill variables as per template in .env file 3) `npm install` 4) `node index.js`
