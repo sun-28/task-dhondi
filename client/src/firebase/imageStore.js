@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from 'firebase/storage';
 
+// left details on purpose so that you can test without adding your own config
 const firebaseConfig = {
     apiKey: "AIzaSyCByk_S_bWS8Zsq_RVE9sYu4xehnJpDjhM",
     authDomain: "taskl2.firebaseapp.com",

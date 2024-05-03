@@ -13,13 +13,14 @@ exports.registerUser = async (req, res) => {
         connection.query('INSERT INTO users (name, username, password,image) VALUES (?, ?, ?,?)', [name, username, hashedPassword,image], (error) => {
             if (error) {
                 console.log(error)
-                res.status(500).json({ success: false, message: 'Error registering user' });
+                //
+                res.json({ success: false, message: error.code === 'ER_DUP_ENTRY' ? 'Username already exists' : 'Error registering user'});
             } else {
-                res.status(201).json({ success: true, message: 'User registered successfully' });
+                res.json({ success: true, message: 'User registered successfully' });
             }
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error registering user' });
+        res.json({ success: false, message: 'Error registering user' });
     }
 };
 
@@ -50,7 +51,7 @@ exports.getUserProfile = (req, res) => {
     const userId = req.userId;
     connection.query('SELECT id, name, username , image FROM users WHERE id = ?', userId, (error, results) => {
         if (error) {
-            res.status(500).json({ success: false, error: 'Error retrieving user' });
+            res.json({ success: false, error: 'Error retrieving user' });
         } else {
             const {id,name,username,image} = results[0];
             res.json({ success: true, user: {id,name,username,image} });

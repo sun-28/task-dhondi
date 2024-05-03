@@ -10,7 +10,7 @@ const SideBar = () => {
 
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen sticky top-0">
       <div className="hidden md:block bg-white text-black w-64">
         <div className="p-4">
           <SideContent/>

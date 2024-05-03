@@ -11,6 +11,7 @@ const AppProvider = ({children}) => {
   const [showModal, setShowModal] = useState(false);
   const [postDetails, setpostDetails] = useState({title:"",content:"",tags:[],id:-1,update:false});
   const [showDel, setshowDel] = useState(false)
+  const [postDel, setpostDel] = useState(-1)
   const [yourPosts, setyourPosts] = useState([])
   const [allPosts, setallPosts] = useState([])
   const [credentials, setcredentials] = useState({username:'',password:'',name:''})
@@ -25,6 +26,7 @@ const AppProvider = ({children}) => {
           }
         })
         setuserDetails(data.user)
+        
       } catch (error) {
         console.log(error)
       }
@@ -46,6 +48,7 @@ const AppProvider = ({children}) => {
   }
 
   const handlePublish = async () => {
+    console.log(postDetails)
       if(postDetails.update===true){
           const {data} = await axios.put(`http://localhost:5000/post/update/${postDetails.id}`,postDetails,{
               headers:{
@@ -109,6 +112,7 @@ const AppProvider = ({children}) => {
 
   return (
     <AppContext.Provider value={{
+      fetchUserDetails,
       credentials,
       setcredentials,
       userDetails,
@@ -127,7 +131,9 @@ const AppProvider = ({children}) => {
       allPosts,
       yourPosts,
       isSideBarOpen,
-      setIsSideBarOpen
+      setIsSideBarOpen,
+      postDel,
+      setpostDel
     }}>
       {children}
     </AppContext.Provider>

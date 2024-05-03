@@ -6,6 +6,7 @@ import { Link, useLocation } from 'react-router-dom';
 const SideContent = () => {
     const location = useLocation();
     const {userDetails,setShowModal} = useContext(AppContext)
+    console.log(userDetails)
     return (
         <div className='w-full flex justify-center flex-col items-center'>
             <div className='flex justify-center flex-col items-center gap-2 mb-16' >

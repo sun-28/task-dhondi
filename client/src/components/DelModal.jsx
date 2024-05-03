@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const DelModal = ({id,nav}) =>  {
+const DelModal = ({nav}) => {
+    const {postDel,setpostDel} = useContext(AppContext);
+    const id = postDel;
     let navigate = useNavigate()
-    const {showDel , setshowDel ,fetchYourPosts ,fetchallPosts , posr } = useContext(AppContext);
+    const {showDel , setshowDel ,fetchYourPosts ,fetchallPosts} = useContext(AppContext);
     const handleDel = async () => {
       const {data} = await axios.delete(`http://localhost:5000/post/del/${id}`,{
           headers:{
@@ -23,6 +25,7 @@ const DelModal = ({id,nav}) =>  {
       else{
           toast.error('Error Deleting Post');
       }
+      setpostDel(-1);
     }
   return (
     <>
