@@ -1,0 +1,18 @@
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    image VARCHAR(255),
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE posts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    tags JSON,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
