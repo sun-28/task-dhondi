@@ -8,11 +8,11 @@ const jwtSecret = process.env.JWT_SECRET;
 exports.registerUser = async (req, res) => {
     try {
         const { name, username, password ,image} = req.body;
-        console.log(password,typeof(password))
         const salt = bcrypt.genSaltSync(10);
         const hashedPassword = await bcrypt.hash(password, salt);
-        connection.query('INSERT INTO users (name, username, password,image) VALUES (?, ?, ?)', [name, username, hashedPassword,image], (error) => {
+        connection.query('INSERT INTO users (name, username, password,image) VALUES (?, ?, ?,?)', [name, username, hashedPassword,image], (error) => {
             if (error) {
+                console.log(error)
                 res.status(500).json({ success: false, message: 'Error registering user' });
             } else {
                 res.status(201).json({ success: true, message: 'User registered successfully' });
@@ -26,24 +26,23 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
     try {
         const { username, password } = req.body;
-        
         connection.query('SELECT * FROM users WHERE username = ?', username, async (error, results) => {
             if (error || results.length === 0) {
-                res.status(401).json({ success: false, message: 'Invalid username or password' });
+                res.json({ success: false, message: 'Invalid username or password' });
             } else {
                 const user = results[0];
                 const match = await bcrypt.compare(password, user.password);
                 
                 if (match) {
-                    const token = jwt.sign({ userId: user.id }, jwtSecret);
+                    const token = jwt.sign({ userId: user.id }, jwtSecret, { expiresIn: '1h' });
                     res.json({ success: true, token });
                 } else {
-                    res.status(401).json({ success: false, message: 'Invalid username or password' });
+                    res.json({ success: false, message: 'Invalid username or password' });
                 }
             }
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error logging in' });
+        res.json({ success: false, message: 'Error logging in' });
     }
 };
 

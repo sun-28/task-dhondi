@@ -88,11 +88,12 @@ exports.getPostById = (req, res) => {
         } else if (results.length === 0) {
             res.status(404).json({ success: false, message: 'Post not found' });
         } else {
-            connection.query('SELECT name FROM users WHERE id = ?', results[0].user_id, (error, userResults) => {
+            connection.query('SELECT name , image FROM users WHERE id = ?', results[0].user_id, (error, userResults) => {
                 if (error) {
                     return res.status(500).json({ success: false, message: 'Error retrieving user' });
                 } else {
                     results[0].name = userResults[0].name;
+                    results[0].image = userResults[0].image;
                     res.json({ success: true, data: results[0]});
                 }
             });

@@ -7,6 +7,7 @@ export const AppContext = createContext({});
 
 const AppProvider = ({children}) => {
   const [userDetails, setuserDetails] = useState({})
+  const [showSidebar, setshowSidebar] = useState(false)
   const [showModal, setShowModal] = useState(false);
   const [postDetails, setpostDetails] = useState({title:"",content:"",tags:[],id:-1,update:false});
   const [showDel, setshowDel] = useState(false)
@@ -112,6 +113,8 @@ const AppProvider = ({children}) => {
       setcredentials,
       userDetails,
       setuserDetails,
+      showSidebar,
+      setshowSidebar,
       fetchallPosts,
       fetchYourPosts,
       showModal,

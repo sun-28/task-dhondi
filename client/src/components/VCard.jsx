@@ -18,7 +18,7 @@ const short = (text) => {
   }
 }
 
-const VCard = ({title,name,created_at,content,tags,id,user_id}) => {
+const VCard = ({title,name,created_at,content,tags,id,user_id,image}) => {
   const {setShowModal, setpostDetails,setshowDel,userDetails} = useContext(AppContext); 
   const navigate = useNavigate();
   const handleOpenPost = () => {
@@ -51,9 +51,10 @@ const VCard = ({title,name,created_at,content,tags,id,user_id}) => {
             </svg>
           </div>}
         </div>
-        <div className='flex flex-row gap-8 flex-2 w-full items-center'>
+        <div className='flex flex-row gap-2 flex-2 w-full items-center'>
+            <img className='w-6 h-6 rounded-xl' src={image} alt="img" />
             <p>{name}</p>
-            <p className='text-gray-500 text-sm'>{created_at}</p>
+            <p className='text-gray-500 text-sm ml-5'>{created_at}</p>
         </div>
         <hr/>
         <p className='flex-1 w-full'>{short(content)}. <span className='text-md text-sky-700 ml-2 mt-[2px] text-center hover:cursor-pointer' onClick={handleOpenPost}>read more</span></p>

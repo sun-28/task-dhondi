@@ -6,7 +6,7 @@ import { AppContext } from '../context/AppContext';
 import DelModal from '../components/DelModal';
 
 const Post = () => {
-  const {setShowModal,setshowDel,setpostDetails,userDetails,showModal} = useContext(AppContext); 
+  const {setShowModal,setshowDel,setpostDetails,userDetails,showModal,setshowSidebar} = useContext(AppContext); 
   const [yourPosts, setyourPosts] = useState(false)
     const { id } = useParams();
     const [post, setPost] = useState({});
@@ -31,7 +31,8 @@ const Post = () => {
             navigate('/auth')
         }
         else{
-            fetchPost();  
+            fetchPost();
+            setshowSidebar(true);  
         } 
     },[showModal])
     useEffect(() => {
@@ -75,9 +76,10 @@ const Post = () => {
             </svg>
           </div>}
         </div>
-        <div className='flex flex-row gap-8 flex-2'>
-            <p className=' font-medium'>{post.name}</p>
-            <p>{post.created_at}</p>
+        <div className='flex flex-row gap-2 flex-2'>
+            <img className='w-6 h-6 rounded-xl' src={post.image} alt="img" />
+            <p className=' font-medium mr-5'>{post.name}</p>
+            <p className='text-sm text-gray-500'>{post.created_at}</p>
         </div>
         <hr/>
         <p className='flex flex-1'>{post.content}</p>

@@ -10,10 +10,13 @@ import { v4 } from "uuid";
 
 const Auth = () => {
     const navigate = useNavigate();
-    const {credentials,setcredentials} = useContext(AppContext);
+    const {credentials,setcredentials,setshowSidebar} = useContext(AppContext);
     useEffect(() => {
         if(localStorage.getItem('auth-token')){
             navigate('/')
+        }
+        else{
+            setshowSidebar(false)
         }
     }, [])
     const [auth, setauth] = useState('login')
@@ -26,15 +29,6 @@ const Auth = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if(img!==null){
-            const imgRef =  ref(imageDb,`files/${v4()}`)
-            uploadBytes(imgRef,img).then(value=>{
-                getDownloadURL(value.ref).then(url=>{
-                     console.log(url)
-                    setcredentials((prev) => ({ ...prev, image: url }));
-                })
-            })
-         }
         if(auth=='login'){
             const {data} = await axios.post('http://localhost:5000/user/login',credentials);
             if(data.success){
@@ -47,7 +41,14 @@ const Auth = () => {
             }
         }
         else{
-            console.log(credentials)
+            if(img!==null){
+                const imgRef =  ref(imageDb,`files/${v4()}`)
+                uploadBytes(imgRef,img).then(value=>{
+                    getDownloadURL(value.ref).then(url=>{
+                        setcredentials((prev) => ({ ...prev, image: url }));
+                    })
+                })
+             }
             const {data} = await axios.post('http://localhost:5000/user/register',credentials);
             if(data.success){
                 setauth('login');

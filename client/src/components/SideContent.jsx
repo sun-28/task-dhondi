@@ -10,7 +10,7 @@ const SideContent = () => {
         <div className='w-full flex justify-center flex-col items-center'>
             <div className='flex justify-center flex-col items-center gap-2 mb-16' >
                 <div className="w-20 h-20 rounded-full overflow-hidden bg-black">
-                    <img className="w-full h-full object-cover" src='/vite.svg' alt="img" />
+                    <img className="w-full h-full object-cover" src={userDetails.image} alt="img" />
                 </div>
             <h2>{userDetails.name}</h2>
             <p>@{userDetails.username}</p>
@@ -64,12 +64,12 @@ const SideContent = () => {
                     </svg>
                     <h3>Settings</h3>
                 </div>
-                <div className='flex gap-5'>
+                <Link onClick={()=>localStorage.clear()} to='/auth' className='flex gap-5'>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M13 16V17C13 17.7956 12.6839 18.5587 12.1213 19.1213C11.5587 19.6839 10.7956 20 10 20H6C5.20435 20 4.44129 19.6839 3.87868 19.1213C3.31607 18.5587 3 17.7956 3 17V7C3 6.20435 3.31607 5.44129 3.87868 4.87868C4.44129 4.31607 5.20435 4 6 4H10C10.7956 4 11.5587 4.31607 12.1213 4.87868C12.6839 5.44129 13 6.20435 13 7V8M17 16L21 12L17 16ZM21 12L17 8L21 12ZM21 12H7H21Z" stroke="#444658" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     <h3>Logout</h3>
-                </div>
+                </Link>
             </div>
         </div>
   )
